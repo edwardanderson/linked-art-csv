@@ -108,19 +108,22 @@ def load_document_and_cache(*args):
     return doc
 
 
+# Cache the Linked Art context JSON.
 response = requests.get('https://linked.art/ns/v1/linked-art.json')
 context = response.json()
 set_document_loader(load_document_and_cache)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('file', type=argparse.FileType('r'))
     args = parser.parse_args()
     objects = list()
-    # Iterate CSV rows.
+    # Iterate CSV rows, creating a Linked Art document for each.
     rows = csv.reader(args.file)
     headers = next(rows)
+    # Require `type`
+    if 'type' and 'id' not in headers:
+        raise Exception('Data must have `id` and `type` columns.')
     for row in rows:
         # Initialise document with base object class.
         for exp, value in zip(headers, row):

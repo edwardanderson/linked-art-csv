@@ -1,7 +1,5 @@
 # Linked Art CSV
 
-Draft.
-
 Utility for generating [Linked Art](https://linked.art/) JSON-LD documents from `.csv` files, by specifying data patterns as XPath-like paths.
 
 ## Dependencies
