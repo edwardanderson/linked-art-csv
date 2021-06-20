@@ -1,5 +1,9 @@
 '''
 Serialise a `.csv` file to Linked Art JSON-LD.
+
+Each row is converted into an XML tree according to path patterns in the headers. Then 
+an XSL tranformation is applied to set the necessary `rdf:about` attributes, before the
+tree is serialised as a graph to JSON-LD.
 '''
 
 
