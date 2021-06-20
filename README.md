@@ -18,24 +18,42 @@ python linked_art_csv.py /path/to/file.csv
 
 ## Example
 
-| type            | id                                      | identified_by/Name/content | identified_by/Name/langauge/Language/id  | identified_by/Name/language/Language/_label |
-|-----------------|-----------------------------------------|----------------------------|------------------------------------------|---------------------------------------------|
-| HumanMadeObject | http://www.wikidata.org/entity/Q166937  | De brieflezende vrouw      | http://vocab.getty.edu/aat/300388256     | Dutch                                       |
-| HumanMadeObject | http://www.wikidata.org/entity/Q3567592 | Whaam!                     | http://vocab.getty.edu/aat/300388277     | English                                     |
+| type            | id                                      | identified_by/Name/content | identified_by/Name/langauge/Language/id  | identified_by/Name/language/Language/_label | subject_of/DigitalObject/access_point/DigitalObject/id         | subject_of/DigitalObject/classified_as/Type/id | subject_of/DigitalObject/classified_as/Type/_label | subject_of/DigitalObject/format |
+|-----------------|-----------------------------------------|----------------------------|------------------------------------------|---------------------------------------------|----------------------------------------------------------------|------------------------------------------------|----------------------------------------------------|---------------------------------|
+| HumanMadeObject | http://www.wikidata.org/entity/Q166937  | De brieflezende vrouw      | http://vocab.getty.edu/aat/300388256     | Dutch                                       | https://www.rijksmuseum.nl/nl/collectie/SK-C-251               | http://vocab.getty.edu/aat/300264578           | Web page                                           | text/html                       |
+| HumanMadeObject | http://www.wikidata.org/entity/Q3567592 | Whaam!                     | http://vocab.getty.edu/aat/300388277     | English                                     | https://www.tate.org.uk/art/artworks/lichtenstein-whaam-t00897 | http://vocab.getty.edu/aat/300264578           | Web page                                           | text/html                       |
 
 ```yaml
 [
   {
     "@context": "https://linked.art/ns/v1/linked-art.json",
-    "id": "http://www.wikidata.org/entity/Q166937",
+    "id": "https://www.wikidata.org/wiki/Q3567592",
     "type": "HumanMadeObject",
+    "subject_of": [
+      {
+        "type": "DigitalObject",
+        "format": "text/html",
+        "classified_as": [
+          {
+            "id": "http://vocab.getty.edu/aat/300264578",
+            "type": "Type",
+            "_label": "Web page"
+          }
+        ],
+        "access_point": [
+          {
+            "id": "https://www.rijksmuseum.nl/nl/collectie/SK-C-251",
+            "type": "DigitalObject"
+          }
+        ]
+      }
+    ],
     "identified_by": [
       {
         "type": "Name",
-        "content": "De brieflezende vrouw",
+        "content": "Whaam!",
         "language": [
           {
-            "id": "http://vocab.getty.edu/aat/300388256",
             "type": "Language",
             "_label": "Dutch"
           }
@@ -45,15 +63,33 @@ python linked_art_csv.py /path/to/file.csv
   },
   {
     "@context": "https://linked.art/ns/v1/linked-art.json",
-    "id": "http://www.wikidata.org/entity/Q3567592",
+    "id": "http://www.wikidata.org/entity/Q17629443",
     "type": "HumanMadeObject",
+    "subject_of": [
+      {
+        "type": "DigitalObject",
+        "format": "text/html",
+        "classified_as": [
+          {
+            "id": "http://vocab.getty.edu/aat/300264578",
+            "type": "Type",
+            "_label": "Web page"
+          }
+        ],
+        "access_point": [
+          {
+            "id": "https://www.tate.org.uk/art/artworks/lichtenstein-whaam-t00897",
+            "type": "DigitalObject"
+          }
+        ]
+      }
+    ],
     "identified_by": [
       {
         "type": "Name",
-        "content": "Whaam!",
+        "content": "Viva la Vida, Watermelons",
         "language": [
           {
-            "id": "http://vocab.getty.edu/aat/300388277",
             "type": "Language",
             "_label": "English"
           }
