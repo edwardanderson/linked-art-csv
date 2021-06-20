@@ -23,7 +23,7 @@ python linked_art_csv.py /path/to/file.csv
 | HumanMadeObject | http://www.wikidata.org/entity/Q166937  | De brieflezende vrouw      | http://vocab.getty.edu/aat/300388256     | Dutch                                       |
 | HumanMadeObject | http://www.wikidata.org/entity/Q3567592 | Whaam!                     | http://vocab.getty.edu/aat/300388277     | English                                     |
 
-```json
+```javascript
 [
   {
     "@context": "https://linked.art/ns/v1/linked-art.json",
