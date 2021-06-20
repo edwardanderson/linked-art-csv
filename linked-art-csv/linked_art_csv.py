@@ -8,6 +8,7 @@ import csv
 import json
 import requests
 from lxml import etree
+from pathlib import Path
 from pyld import jsonld
 from pyld.jsonld import set_document_loader
 from rdflib import ConjunctiveGraph
@@ -79,7 +80,8 @@ class Document(object):
         Create a Linked Art JSON-LD object.
         '''
         # RDF-ise with template
-        xslt = etree.parse('rdf.xslt')
+        here = Path(__file__).parent
+        xslt = etree.parse(f'{here}/rdf.xslt')
         template = etree.XSLT(xslt)
         rdf_xml = template(self.root)
         # Parse RDF.
