@@ -122,8 +122,8 @@ if __name__ == '__main__':
     rows = csv.reader(args.file)
     headers = next(rows)
     for row in rows:
+        # Initialise document with base object class.
         for exp, value in zip(headers, row):
-            # Initialise document with base object class.
             if exp == 'type':
                 doc = Document(value)
                 break

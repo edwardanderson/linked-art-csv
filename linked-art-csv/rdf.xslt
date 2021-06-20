@@ -2,7 +2,7 @@
 
 <!--
 
-Apply `rdf:about` statments to elements which have child <id> nodes.
+Apply `rdf:about` identifier attributes to elements which have child <id> nodes.
 
 -->
 
@@ -25,6 +25,7 @@ Apply `rdf:about` statments to elements which have child <id> nodes.
     </xsl:copy>
 </xsl:template>
 
+<!-- Migrate <id> text to parent attribute -->
 <xsl:template match="*[id]">
     <xsl:copy>
         <xsl:attribute name="rdf:about">
@@ -37,6 +38,7 @@ Apply `rdf:about` statments to elements which have child <id> nodes.
 <!-- Remove nodes -->
 <xsl:template match="id"/>
 
+<!-- Clean up blank space -->
 <xsl:template match="text()">
     <xsl:value-of select="normalize-space()" />
 </xsl:template>
