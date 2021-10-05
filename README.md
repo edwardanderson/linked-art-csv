@@ -5,7 +5,7 @@ Utility for generating [Linked Art](https://linked.art/) documents from `.csv` f
 ## Dependencies
 
 ```bash
-pip install lxml requests rdflib rdflib-jsonld pyld
+pip install lxml requests rdflib rdflib-jsonld pyld loguru
 ```
 
 ## Quickstart
@@ -13,7 +13,7 @@ pip install lxml requests rdflib rdflib-jsonld pyld
 Add a row of headings to a `.csv` file where [Linked Art patterns](https://linked.art/model/index.html) are expressed as XPath-like paths. Each subsequent row of the file represents an entity. Paths may be identified with a zero-indexed integer – for example, data in the column `identified_by[1]/Identifier/content` will be written to the second occurence of the property.
 
 ```bash
-python linked_art_csv.py /path/to/file.csv
+python linked_art_csv.py example.csv
 ```
 
 ## Example
