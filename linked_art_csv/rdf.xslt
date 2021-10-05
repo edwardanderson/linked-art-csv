@@ -37,7 +37,7 @@ Apply `rdf:about` identifier attributes to elements which have child <id> nodes.
     </xsl:copy>
 </xsl:template>
 
-<!-- Remove unwated node(s). -->
+<!-- Remove unwanted node(s). -->
 <xsl:template match="id"/>
 
 <!-- Clean up blank space. -->
