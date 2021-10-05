@@ -13,19 +13,21 @@ Apply `rdf:about` identifier attributes to elements which have child <id> nodes.
 <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
 
+<!-- RDF wrapper. -->
 <xsl:template match="/">
     <rdf:RDF>
         <xsl:apply-templates select="@*|node()"/>
     </rdf:RDF>
 </xsl:template>
 
+<!-- Copy nodes. -->
 <xsl:template match="@*|node()">
     <xsl:copy>
         <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
 </xsl:template>
 
-<!-- Migrate <id> text to parent attribute -->
+<!-- Migrate <id> text to parent attribute. -->
 <xsl:template match="*[id]">
     <xsl:copy>
         <xsl:attribute name="rdf:about">
@@ -35,10 +37,10 @@ Apply `rdf:about` identifier attributes to elements which have child <id> nodes.
     </xsl:copy>
 </xsl:template>
 
-<!-- Remove nodes -->
+<!-- Remove unwated node(s). -->
 <xsl:template match="id"/>
 
-<!-- Clean up blank space -->
+<!-- Clean up blank space. -->
 <xsl:template match="text()">
     <xsl:value-of select="normalize-space()" />
 </xsl:template>

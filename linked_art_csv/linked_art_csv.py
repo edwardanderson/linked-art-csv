@@ -3,14 +3,16 @@ Serialise a `.csv` file to Linked Art JSON-LD.
 
 Each row is converted into an XML tree according to path patterns in the headers. Then 
 an XSL tranformation is applied to set the necessary `rdf:about` attributes, before the
-tree is serialised as a graph to JSON-LD.
+tree is parsed as a graph and serialised to JSON-LD.
 '''
 
 
 import argparse
 import csv
 import json
+import rdflib
 import requests
+from loguru import logger
 from lxml import etree
 from pathlib import Path
 from pyld import jsonld
@@ -54,7 +56,7 @@ class Document(object):
                         node = child
                         break
             else:
-                for i in range(target_index - found_index):
+                for _ in range(target_index - found_index):
                     new_node = etree.Element(component)
                     node.append(new_node)
                 node = new_node
@@ -88,11 +90,12 @@ class Document(object):
         xslt = etree.parse(f'{here}/rdf.xslt')
         template = etree.XSLT(xslt)
         rdf_xml = template(self.root)
+        rdf_xml_str = etree.tostring(rdf_xml)
         # Parse RDF.
         graph = ConjunctiveGraph()
-        graph.parse(data=rdf_xml, format='xml')
+        graph.parse(data=rdf_xml_str, format='xml')
         # Serialise to expanded JSON-LD.
-        js_str = graph.serialize(format='json-ld').decode('utf-8')
+        js_str = graph.serialize(format='json-ld')
         js = json.loads(js_str)
         for i in js:
             i['@context'] = 'https://linked.art/ns/v1/linked-art.json'
@@ -120,6 +123,8 @@ set_document_loader(load_document_and_cache)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('file', type=argparse.FileType('r'))
+    parser.add_argument('-a', '--aggregate', action='store_true')
+    parser.add_argument('-t', '--type', help='Set all records to this `type`.')
     args = parser.parse_args()
     objects = list()
     # Iterate CSV rows, creating a Linked Art document for each.
@@ -128,21 +133,37 @@ if __name__ == '__main__':
     # Require `type`
     if 'type' and 'id' not in headers:
         raise Exception('Data must have `id` and `type` columns.')
-    for row in rows:
+    for n, row in enumerate(rows):
         # Initialise document with base object class.
         for exp, value in zip(headers, row):
             if exp == 'type':
                 doc = Document(value)
                 break
+            elif args.type:
+                doc = Document(args.type)
         # Extend base object with data.
         for exp, value in zip(headers, row):
+            # Require path and value.
+            if not all([exp, value]):
+                continue
+            # Ignore type as already processed.
             if exp == 'type':
                 continue
             doc.update(exp, value)
             if exp == 'id':
                 doc.record = value
-        linked_art_json = doc.serialise()
-        objects.append(linked_art_json)
+
+        try:
+            linked_art_json = doc.serialise()
+        except rdflib.exceptions.ParserError as e:
+            logger.warning(f'Error parsing/serialising data: {e}')
+            continue
+
+        if args.aggregate:
+            objects.append(linked_art_json)
+        else:
+            print(json.dumps(linked_art_json, indent=2))
 
     # Serialise everything to string.
-    print(json.dumps(objects, indent=2, ensure_ascii=False))
+    if args.aggregate:
+        print(json.dumps(objects, indent=2, ensure_ascii=False))
